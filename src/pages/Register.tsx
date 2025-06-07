@@ -24,11 +24,11 @@ export interface RegistrationData {
   email: string;
   phone: string;
   businessAddress: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
   };
   
   // Coworking Preferences
@@ -137,26 +137,8 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">U</span>
-            </div>
-            <span className="font-semibold text-lg">Umbrella Workspace</span>
-          </div>
-          <nav className="hidden md:flex space-x-6">
-            <a href="/" className="text-sm hover:text-primary">Home</a>
-            <a href="#" className="text-sm hover:text-primary">Features</a>
-            <a href="#" className="text-sm hover:text-primary">Contact</a>
-          </nav>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen bg-background p-4">
+      <div className="container mx-auto max-w-4xl">
         {/* Progress Section */}
         <div className="mb-8">
           <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
