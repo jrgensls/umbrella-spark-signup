@@ -72,7 +72,7 @@ serve(async (req) => {
       payment_intent_data: {
         setup_future_usage: "on_session", // Save payment method for future use
       },
-      success_url: `${req.headers.get("origin")}/register?success=true`,
+      success_url: `${req.headers.get("origin")}/payment-success`,
       cancel_url: `${req.headers.get("origin")}/register?canceled=true`,
       metadata: {
         company_name: registrationData.companyName,
