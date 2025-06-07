@@ -23,8 +23,8 @@ import {
 import { RegistrationData } from '@/pages/Register';
 
 const preferencesSchema = z.object({
-  preferredLocation: z.string().min(1, 'Please select a preferred location'),
-  startDate: z.string().min(1, 'Please select a start date'),
+  preferredLocation: z.string().optional(),
+  startDate: z.string().optional(),
 });
 
 interface CoworkingPreferencesStepProps {
@@ -79,7 +79,7 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
             name="preferredLocation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Preferred Location *</FormLabel>
+                <FormLabel>Preferred Location</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -107,7 +107,7 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
             name="startDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Preferred Start Date *</FormLabel>
+                <FormLabel>Preferred Start Date</FormLabel>
                 <FormControl>
                   <Input
                     type="date"
