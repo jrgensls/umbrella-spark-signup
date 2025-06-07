@@ -16,11 +16,14 @@ serve(async (req) => {
   try {
     console.log("Stripe webhook received");
     
-    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+    // Check for Stripe secret key - try both possible names
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") || Deno.env.get("Stripe secret key");
     if (!stripeSecretKey) {
-      console.error("Stripe secret key not found");
-      throw new Error("Stripe configuration error");
+      console.error("Stripe secret key not found in environment variables");
+      console.log("Available env vars:", Object.keys(Deno.env.toObject()));
+      throw new Error("Stripe configuration error - secret key not found");
     }
+    console.log("Stripe secret key found");
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
@@ -41,12 +44,14 @@ serve(async (req) => {
     if (webhookSecret) {
       try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+        console.log("Webhook signature verified successfully");
       } catch (err) {
         console.error("Webhook signature verification failed:", err);
         return new Response("Invalid signature", { status: 400 });
       }
     } else {
       // If no webhook secret is set, parse the body directly (less secure)
+      console.log("No webhook secret set, parsing body directly");
       event = JSON.parse(body);
     }
 
@@ -59,6 +64,7 @@ serve(async (req) => {
 
       // Get customer details
       const customer = await stripe.customers.retrieve(session.customer as string);
+      console.log("Retrieved customer:", customer.id);
       
       // Prepare data to send to your webhook
       const webhookData = {
@@ -76,19 +82,28 @@ serve(async (req) => {
       console.log("Sending data to external webhook:", webhookData);
 
       // Send POST request to your webhook
-      const response = await fetch("https://theproductagency.app.n8n.cloud/webhook-test/81e5a5ad-eb00-4f6c-8e49-6069180e3026", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(webhookData),
-      });
+      try {
+        const response = await fetch("https://theproductagency.app.n8n.cloud/webhook-test/81e5a5ad-eb00-4f6c-8e49-6069180e3026", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(webhookData),
+        });
 
-      if (response.ok) {
-        console.log("Successfully sent data to external webhook");
-      } else {
-        console.error("Failed to send data to external webhook:", response.status, response.statusText);
+        console.log("Webhook response status:", response.status);
+        
+        if (response.ok) {
+          console.log("Successfully sent data to external webhook");
+        } else {
+          const responseText = await response.text();
+          console.error("Failed to send data to external webhook:", response.status, response.statusText, responseText);
+        }
+      } catch (fetchError) {
+        console.error("Error sending to external webhook:", fetchError);
       }
+    } else {
+      console.log("Event type not handled:", event.type);
     }
 
     return new Response(JSON.stringify({ received: true }), {
