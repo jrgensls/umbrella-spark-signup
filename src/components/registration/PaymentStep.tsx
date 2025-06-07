@@ -42,6 +42,17 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
     }
   }, [onUpdate, onComplete, toast]);
 
+  // Validate required fields before allowing payment
+  const isDataComplete = () => {
+    return (
+      data.companyName.trim() !== '' &&
+      data.contactPersonName.trim() !== '' &&
+      data.contactEmail.trim() !== '' &&
+      data.contactPhone.trim() !== '' &&
+      data.preferredLocation.trim() !== ''
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -49,7 +60,20 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         
         <OrderSummary />
         <RegistrationSummary data={data} />
-        <StripePaymentButton data={data} />
+        
+        {isDataComplete() ? (
+          <StripePaymentButton data={data} />
+        ) : (
+          <div className="text-center p-6 bg-muted/50 rounded-lg">
+            <p className="text-muted-foreground mb-2">
+              Please complete all required fields in the previous steps before proceeding with payment.
+            </p>
+            <Button variant="outline" onClick={onPrevious}>
+              Go Back to Complete Registration
+            </Button>
+          </div>
+        )}
+        
         <SecurityNotice />
       </div>
 
@@ -57,9 +81,15 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         <Button type="button" variant="outline" onClick={onPrevious}>
           Previous
         </Button>
-        <div className="text-sm text-muted-foreground">
-          Complete payment above to finish registration
-        </div>
+        {isDataComplete() ? (
+          <div className="text-sm text-muted-foreground">
+            Complete payment above to finish registration
+          </div>
+        ) : (
+          <div className="text-sm text-destructive">
+            Please complete all required fields first
+          </div>
+        )}
       </div>
     </div>
   );
