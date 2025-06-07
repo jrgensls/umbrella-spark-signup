@@ -26,10 +26,10 @@ const contactDetailsSchema = z.object({
   vatTaxNumber: z.string().optional(),
   organizationNumber: z.string().optional(),
   billingAddress: z.object({
-    street: z.string().min(1, 'Street address is required'),
-    city: z.string().min(1, 'City is required'),
-    postalCode: z.string().min(1, 'Postal code is required'),
-    country: z.string().min(1, 'Country is required'),
+    street: z.string().optional(),
+    city: z.string().optional(),
+    postalCode: z.string().optional(),
+    country: z.string().optional(),
   }),
   additionalBillingContact: z.object({
     name: z.string().optional(),
@@ -111,7 +111,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
             name="billingAddress.street"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Street Address *</FormLabel>
+                <FormLabel>Street Address</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter street address" {...field} />
                 </FormControl>
@@ -126,7 +126,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
               name="billingAddress.city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City *</FormLabel>
+                  <FormLabel>City</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter city" {...field} />
                   </FormControl>
@@ -140,7 +140,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
               name="billingAddress.postalCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Postal Code *</FormLabel>
+                  <FormLabel>Postal Code</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter postal code" {...field} />
                   </FormControl>
@@ -155,7 +155,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
             name="billingAddress.country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country *</FormLabel>
+                <FormLabel>Country</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
