@@ -10,16 +10,12 @@ export const OrderSummary: React.FC = () => {
       <div className="space-y-2 text-sm">
         <div className="flex justify-between">
           <span>Setup Fee</span>
-          <span>$99.00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>First Month</span>
-          <span>$199.00</span>
+          <span>€1.00</span>
         </div>
         <Separator />
         <div className="flex justify-between font-semibold">
           <span>Total</span>
-          <span>$298.00</span>
+          <span>€1.00</span>
         </div>
       </div>
     </Card>
