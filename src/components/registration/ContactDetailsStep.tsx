@@ -56,7 +56,10 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
     defaultValues: {
       vatTaxNumber: data.vatTaxNumber,
       organizationNumber: data.organizationNumber,
-      billingAddress: data.billingAddress,
+      billingAddress: {
+        ...data.billingAddress,
+        country: data.billingAddress.country || 'BE'
+      },
       additionalBillingContact: data.additionalBillingContact,
     },
   });
@@ -156,13 +159,14 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Country</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value || 'BE'}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value="BE">Belgium</SelectItem>
                     <SelectItem value="US">United States</SelectItem>
                     <SelectItem value="CA">Canada</SelectItem>
                     <SelectItem value="UK">United Kingdom</SelectItem>

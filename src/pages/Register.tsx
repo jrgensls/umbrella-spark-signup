@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -54,7 +55,7 @@ const Register = () => {
       street: '',
       city: '',
       postalCode: '',
-      country: ''
+      country: 'BE'
     },
     additionalBillingContact: {
       name: '',
