@@ -23,6 +23,8 @@ import {
 import { RegistrationData } from '@/pages/Register';
 
 const contactDetailsSchema = z.object({
+  vatTaxNumber: z.string().optional(),
+  organizationNumber: z.string().optional(),
   billingAddress: z.object({
     street: z.string().min(1, 'Street address is required'),
     city: z.string().min(1, 'City is required'),
@@ -52,6 +54,8 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
   const form = useForm<z.infer<typeof contactDetailsSchema>>({
     resolver: zodResolver(contactDetailsSchema),
     defaultValues: {
+      vatTaxNumber: data.vatTaxNumber,
+      organizationNumber: data.organizationNumber,
       billingAddress: data.billingAddress,
       additionalBillingContact: data.additionalBillingContact,
     },
@@ -65,6 +69,40 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Company Tax Information</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="vatTaxNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>VAT Tax Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter VAT tax number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="organizationNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Organization Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter organization number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Billing Address</h3>
           

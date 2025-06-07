@@ -21,8 +21,6 @@ const companyDetailsSchema = z.object({
   contactPersonName: z.string().optional(),
   contactEmail: z.string().optional(),
   contactPhone: z.string().optional(),
-  vatTaxNumber: z.string().optional(),
-  organizationNumber: z.string().optional(),
   vatRepresentative: z.boolean(),
 });
 
@@ -44,8 +42,6 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
       contactPersonName: data.contactPersonName,
       contactEmail: data.contactEmail,
       contactPhone: data.contactPhone,
-      vatTaxNumber: data.vatTaxNumber,
-      organizationNumber: data.organizationNumber,
       vatRepresentative: data.vatRepresentative,
     },
   });
@@ -112,36 +108,6 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
                   <FormLabel>Contact Phone</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter contact phone" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="vatTaxNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>VAT Tax Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter VAT tax number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="organizationNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Organization Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter organization number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
