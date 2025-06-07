@@ -54,6 +54,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : registrationData.contactEmail,
+      billing_address_collection: "auto", // Don't require billing address collection
       line_items: [
         {
           price_data: {
