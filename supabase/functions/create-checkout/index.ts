@@ -33,24 +33,27 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    // Create a one-time payment session
+    // Create a one-time payment session with payment method saving enabled
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : registrationData.contactEmail,
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "eur",
             product_data: { 
               name: "Umbrella Network Registration",
-              description: "Setup Fee + First Month"
+              description: "Setup Fee"
             },
-            unit_amount: 29800, // $298.00 in cents
+            unit_amount: 100, // €1.00 in cents
           },
           quantity: 1,
         },
       ],
       mode: "payment",
+      payment_intent_data: {
+        setup_future_usage: "on_session", // Save payment method for future use
+      },
       success_url: `${req.headers.get("origin")}/register?success=true`,
       cancel_url: `${req.headers.get("origin")}/register?canceled=true`,
       metadata: {
