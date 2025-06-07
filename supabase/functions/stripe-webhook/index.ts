@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 
@@ -35,13 +36,13 @@ serve(async (req) => {
       return new Response("No signature", { status: 400 });
     }
 
-    // For webhook verification, you'll need to set STRIPE_WEBHOOK_SECRET
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
     let event;
 
     if (webhookSecret) {
       try {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+        // Use the raw body and signature for verification
+        event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
         console.log("Webhook signature verified successfully");
       } catch (err) {
         console.error("Webhook signature verification failed:", err);
