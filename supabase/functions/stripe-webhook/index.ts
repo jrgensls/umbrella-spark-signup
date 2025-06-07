@@ -1,0 +1,107 @@
+
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import Stripe from "https://esm.sh/stripe@14.21.0";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    console.log("Stripe webhook received");
+    
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeSecretKey) {
+      console.error("Stripe secret key not found");
+      throw new Error("Stripe configuration error");
+    }
+
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: "2023-10-16",
+    });
+
+    const body = await req.text();
+    const signature = req.headers.get("stripe-signature");
+
+    if (!signature) {
+      console.error("No Stripe signature found");
+      return new Response("No signature", { status: 400 });
+    }
+
+    // For webhook verification, you'll need to set STRIPE_WEBHOOK_SECRET
+    const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
+    let event;
+
+    if (webhookSecret) {
+      try {
+        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+      } catch (err) {
+        console.error("Webhook signature verification failed:", err);
+        return new Response("Invalid signature", { status: 400 });
+      }
+    } else {
+      // If no webhook secret is set, parse the body directly (less secure)
+      event = JSON.parse(body);
+    }
+
+    console.log("Event type:", event.type);
+
+    // Handle successful payment
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.log("Payment successful for session:", session.id);
+
+      // Get customer details
+      const customer = await stripe.customers.retrieve(session.customer as string);
+      
+      // Prepare data to send to your webhook
+      const webhookData = {
+        stripe_session_id: session.id,
+        customer_id: session.customer,
+        payment_status: session.payment_status,
+        amount_total: session.amount_total,
+        currency: session.currency,
+        customer_email: (customer as Stripe.Customer).email,
+        customer_name: (customer as Stripe.Customer).name,
+        metadata: session.metadata,
+        timestamp: new Date().toISOString(),
+      };
+
+      console.log("Sending data to external webhook:", webhookData);
+
+      // Send POST request to your webhook
+      const response = await fetch("https://theproductagency.app.n8n.cloud/webhook-test/81e5a5ad-eb00-4f6c-8e49-6069180e3026", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookData),
+      });
+
+      if (response.ok) {
+        console.log("Successfully sent data to external webhook");
+      } else {
+        console.error("Failed to send data to external webhook:", response.status, response.statusText);
+      }
+    }
+
+    return new Response(JSON.stringify({ received: true }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error processing webhook:", error);
+    return new Response(JSON.stringify({ 
+      error: error.message || "Webhook processing failed" 
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+    });
+  }
+});

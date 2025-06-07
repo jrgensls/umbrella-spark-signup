@@ -88,7 +88,16 @@ serve(async (req) => {
       metadata: {
         company_name: registrationData.companyName,
         contact_person: registrationData.contactPersonName,
+        contact_email: registrationData.contactEmail,
+        contact_phone: registrationData.contactPhone,
+        vat_tax_number: registrationData.vatTaxNumber,
+        organization_number: registrationData.organizationNumber,
         preferred_location: registrationData.preferredLocation,
+        start_date: registrationData.startDate,
+        billing_street: registrationData.billingAddress.street || "",
+        billing_city: registrationData.billingAddress.city || "",
+        billing_postal_code: registrationData.billingAddress.postalCode || "",
+        billing_country: registrationData.billingAddress.country || "",
       },
     });
 
