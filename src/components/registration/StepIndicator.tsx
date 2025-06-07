@@ -16,11 +16,23 @@ const steps = [
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between mb-8">
       {steps.map((step, index) => (
         <div key={step.number} className="flex items-center">
-          {/* Step Circle */}
-          <div className="relative">
+          {/* Step Circle and Title Container */}
+          <div className="relative flex flex-col items-center">
+            {/* Step Title - moved above the circle */}
+            <div className="mb-2 text-center">
+              <span
+                className={`text-xs font-medium whitespace-nowrap ${
+                  step.number <= currentStep ? 'text-foreground' : 'text-muted-foreground'
+                }`}
+              >
+                {step.title}
+              </span>
+            </div>
+            
+            {/* Step Circle */}
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                 step.number < currentStep
@@ -35,16 +47,6 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
               ) : (
                 step.number
               )}
-            </div>
-            {/* Step Title */}
-            <div className="absolute top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-              <span
-                className={`text-xs font-medium ${
-                  step.number <= currentStep ? 'text-foreground' : 'text-muted-foreground'
-                }`}
-              >
-                {step.title}
-              </span>
             </div>
           </div>
           
