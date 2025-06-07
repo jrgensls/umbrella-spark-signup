@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -20,12 +19,11 @@ serve(async (req) => {
     const { registrationData } = await req.json();
     console.log("Registration data received:", registrationData);
 
-    // Check for Stripe secret key - try both possible names
-    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") || Deno.env.get("Stripe secret key");
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeSecretKey) {
-      console.error("Stripe secret key not found in environment variables");
+      console.error("STRIPE_SECRET_KEY not found in environment variables");
       console.log("Available env vars:", Object.keys(Deno.env.toObject()));
-      throw new Error("Stripe configuration error - secret key not found");
+      throw new Error("Stripe configuration error - STRIPE_SECRET_KEY not found");
     }
     console.log("Stripe secret key found");
 
