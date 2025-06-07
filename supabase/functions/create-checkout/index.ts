@@ -46,14 +46,25 @@ serve(async (req) => {
       customerId = customers.data[0].id;
       console.log("Found existing customer:", customerId);
     } else {
-      console.log("No existing customer found, will create new one during checkout");
+      // Create a new customer
+      console.log("Creating new Stripe customer...");
+      const customer = await stripe.customers.create({
+        email: registrationData.contactEmail,
+        name: registrationData.contactPersonName,
+        metadata: {
+          company_name: registrationData.companyName,
+          contact_person: registrationData.contactPersonName,
+          preferred_location: registrationData.preferredLocation,
+        },
+      });
+      customerId = customer.id;
+      console.log("Created new customer:", customerId);
     }
 
     // Create a one-time payment session with payment method saving enabled
     console.log("Creating Stripe checkout session...");
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : registrationData.contactEmail,
       billing_address_collection: "auto", // Don't require billing address collection
       line_items: [
         {
