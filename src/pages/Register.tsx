@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,7 @@ export interface RegistrationData {
   contactPhone: string;
   vatTaxNumber: string;
   organizationNumber: string;
-  vatRepresentative: boolean;
+  legalRepresentative: boolean;
   
   // Billing Data
   billingAddress: {
@@ -50,7 +51,7 @@ const Register = () => {
     contactPhone: '',
     vatTaxNumber: '',
     organizationNumber: '',
-    vatRepresentative: false,
+    legalRepresentative: false,
     billingAddress: {
       street: '',
       city: '',

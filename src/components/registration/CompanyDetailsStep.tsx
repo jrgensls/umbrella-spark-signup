@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,7 +20,7 @@ const companyDetailsSchema = z.object({
   contactPersonName: z.string().optional(),
   contactEmail: z.string().optional(),
   contactPhone: z.string().optional(),
-  vatRepresentative: z.boolean(),
+  legalRepresentative: z.boolean(),
 });
 
 interface CompanyDetailsStepProps {
@@ -42,7 +41,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
       contactPersonName: data.contactPersonName,
       contactEmail: data.contactEmail,
       contactPhone: data.contactPhone,
-      vatRepresentative: data.vatRepresentative,
+      legalRepresentative: data.legalRepresentative,
     },
   });
 
@@ -117,7 +116,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
 
           <FormField
             control={form.control}
-            name="vatRepresentative"
+            name="legalRepresentative"
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                 <FormControl>
@@ -128,7 +127,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>
-                    VAT Representative
+                    Legal Representative
                   </FormLabel>
                 </div>
               </FormItem>
