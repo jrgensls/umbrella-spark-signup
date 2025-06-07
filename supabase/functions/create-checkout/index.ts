@@ -20,11 +20,12 @@ serve(async (req) => {
     const { registrationData } = await req.json();
     console.log("Registration data received:", registrationData);
 
-    // Check for Stripe secret key
-    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+    // Check for Stripe secret key - try both possible names
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") || Deno.env.get("Stripe secret key");
     if (!stripeSecretKey) {
-      console.error("STRIPE_SECRET_KEY not found in environment variables");
-      throw new Error("Stripe configuration error");
+      console.error("Stripe secret key not found in environment variables");
+      console.log("Available env vars:", Object.keys(Deno.env.toObject()));
+      throw new Error("Stripe configuration error - secret key not found");
     }
     console.log("Stripe secret key found");
 
