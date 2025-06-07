@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,24 +10,26 @@ import { StepIndicator } from '@/components/registration/StepIndicator';
 import { useToast } from '@/hooks/use-toast';
 
 export interface RegistrationData {
-  // Company Details
+  // Company Information
   companyName: string;
-  industry: string;
-  companySize: string;
-  logo?: File;
-  description: string;
+  contactPersonName: string;
+  contactEmail: string;
+  contactPhone: string;
+  vatTaxNumber: string;
+  organizationNumber: string;
+  vatRepresentative: boolean;
   
-  // Contact Details
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  businessAddress: {
+  // Billing Data
+  billingAddress: {
     street?: string;
     city?: string;
-    state?: string;
-    zipCode?: string;
+    postalCode?: string;
     country?: string;
+  };
+  additionalBillingContact: {
+    name?: string;
+    email?: string;
+    phone?: string;
   };
   
   // Coworking Preferences
@@ -44,19 +45,22 @@ const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     companyName: '',
-    industry: '',
-    companySize: '',
-    description: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    businessAddress: {
+    contactPersonName: '',
+    contactEmail: '',
+    contactPhone: '',
+    vatTaxNumber: '',
+    organizationNumber: '',
+    vatRepresentative: false,
+    billingAddress: {
       street: '',
       city: '',
-      state: '',
-      zipCode: '',
+      postalCode: '',
       country: ''
+    },
+    additionalBillingContact: {
+      name: '',
+      email: '',
+      phone: ''
     },
     preferredLocation: '',
     membershipType: '',

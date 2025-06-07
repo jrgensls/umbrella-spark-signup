@@ -5,8 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import {
   Form,
   FormControl,
@@ -15,20 +13,17 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { RegistrationData } from '@/pages/Register';
 
 const companyDetailsSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
-  industry: z.string().min(1, 'Industry selection is required'),
-  companySize: z.string().min(1, 'Company size is required'),
-  description: z.string().min(10, 'Please provide at least 10 characters'),
+  contactPersonName: z.string().min(1, 'Contact person name is required'),
+  contactEmail: z.string().email('Please enter a valid email address'),
+  contactPhone: z.string().min(1, 'Contact phone is required'),
+  vatTaxNumber: z.string().min(1, 'VAT tax number is required'),
+  organizationNumber: z.string().min(1, 'Organization number is required'),
+  vatRepresentative: z.boolean(),
 });
 
 interface CompanyDetailsStepProps {
@@ -46,9 +41,12 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
     resolver: zodResolver(companyDetailsSchema),
     defaultValues: {
       companyName: data.companyName,
-      industry: data.industry,
-      companySize: data.companySize,
-      description: data.description,
+      contactPersonName: data.contactPersonName,
+      contactEmail: data.contactEmail,
+      contactPhone: data.contactPhone,
+      vatTaxNumber: data.vatTaxNumber,
+      organizationNumber: data.organizationNumber,
+      vatRepresentative: data.vatRepresentative,
     },
   });
 
@@ -57,114 +55,120 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
     onNext();
   };
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onUpdate({ logo: file });
-    }
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Name *</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your company name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="industry"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Industry *</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Company Information</h3>
+          
+          <FormField
+            control={form.control}
+            name="companyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company Name *</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your industry" />
-                  </SelectTrigger>
+                  <Input placeholder="Enter your company name" {...field} />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="technology">Technology</SelectItem>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="retail">Retail</SelectItem>
-                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                  <SelectItem value="consulting">Consulting</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="companySize"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Size *</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select company size" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="1-10">1-10 employees</SelectItem>
-                  <SelectItem value="11-50">11-50 employees</SelectItem>
-                  <SelectItem value="51-200">51-200 employees</SelectItem>
-                  <SelectItem value="201-500">201-500 employees</SelectItem>
-                  <SelectItem value="500+">500+ employees</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="space-y-2">
-          <Label htmlFor="logo">Company Logo</Label>
-          <Input
-            id="logo"
-            type="file"
-            accept="image/*"
-            onChange={handleLogoUpload}
-            className="cursor-pointer"
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <p className="text-sm text-muted-foreground">
-            Upload your company logo (optional)
-          </p>
-        </div>
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Description *</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us about your company..."
-                  className="min-h-[100px]"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="contactPersonName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact Person Name *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter contact person name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="contactEmail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Email *</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="Enter contact email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contactPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Phone *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter contact phone" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="vatTaxNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>VAT Tax Number *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter VAT tax number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="organizationNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Organization Number *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter organization number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="vatRepresentative"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    VAT Representative
+                  </FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex justify-end">
           <Button type="submit" className="w-full sm:w-auto">

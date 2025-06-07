@@ -20,23 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { RegistrationData } from '@/pages/Register';
 
 const contactDetailsSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Please enter a valid email address'),
-  phone: z.string().min(10, 'Please enter a valid phone number'),
-  businessAddress: z.object({
+  billingAddress: z.object({
     street: z.string().min(1, 'Street address is required'),
     city: z.string().min(1, 'City is required'),
-    state: z.string().min(1, 'State is required'),
-    zipCode: z.string().min(1, 'ZIP code is required'),
+    postalCode: z.string().min(1, 'Postal code is required'),
     country: z.string().min(1, 'Country is required'),
   }),
-  isLegalRepresentative: z.boolean().refine(val => val === true, {
-    message: 'You must confirm you are the legal representative',
+  additionalBillingContact: z.object({
+    name: z.string().optional(),
+    email: z.string().email('Please enter a valid email address').optional().or(z.literal('')),
+    phone: z.string().optional(),
   }),
 });
 
@@ -56,18 +52,13 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
   const form = useForm<z.infer<typeof contactDetailsSchema>>({
     resolver: zodResolver(contactDetailsSchema),
     defaultValues: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone,
-      businessAddress: data.businessAddress,
-      isLegalRepresentative: false,
+      billingAddress: data.billingAddress,
+      additionalBillingContact: data.additionalBillingContact,
     },
   });
 
   const onSubmit = (values: z.infer<typeof contactDetailsSchema>) => {
-    const { isLegalRepresentative, ...restValues } = values;
-    onUpdate(restValues);
+    onUpdate(values);
     onNext();
   };
 
@@ -75,73 +66,11 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Contact Information</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="First name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Last name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contact Email *</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Enter contact email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number *</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Business Address</h3>
+          <h3 className="text-lg font-semibold">Billing Address</h3>
           
           <FormField
             control={form.control}
-            name="businessAddress.street"
+            name="billingAddress.street"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Street Address *</FormLabel>
@@ -156,7 +85,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="businessAddress.city"
+              name="billingAddress.city"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>City *</FormLabel>
@@ -170,12 +99,12 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
 
             <FormField
               control={form.control}
-              name="businessAddress.state"
+              name="billingAddress.postalCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>State *</FormLabel>
+                  <FormLabel>Postal Code *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter state" {...field} />
+                    <Input placeholder="Enter postal code" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -183,15 +112,63 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
             />
           </div>
 
+          <FormField
+            control={form.control}
+            name="billingAddress.country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country *</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="US">United States</SelectItem>
+                    <SelectItem value="CA">Canada</SelectItem>
+                    <SelectItem value="UK">United Kingdom</SelectItem>
+                    <SelectItem value="AU">Australia</SelectItem>
+                    <SelectItem value="DE">Germany</SelectItem>
+                    <SelectItem value="FR">France</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Additional Billing Contact (Optional)</h3>
+          <p className="text-sm text-muted-foreground">
+            If different from primary contact information
+          </p>
+          
+          <FormField
+            control={form.control}
+            name="additionalBillingContact.name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter additional contact name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="businessAddress.zipCode"
+              name="additionalBillingContact.email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ZIP Code *</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter ZIP code" {...field} />
+                    <Input type="email" placeholder="Enter additional contact email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,53 +177,19 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
 
             <FormField
               control={form.control}
-              name="businessAddress.country"
+              name="additionalBillingContact.phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="US">United States</SelectItem>
-                      <SelectItem value="CA">Canada</SelectItem>
-                      <SelectItem value="UK">United Kingdom</SelectItem>
-                      <SelectItem value="AU">Australia</SelectItem>
-                      <SelectItem value="DE">Germany</SelectItem>
-                      <SelectItem value="FR">France</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter additional contact phone" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
-
-        <FormField
-          control={form.control}
-          name="isLegalRepresentative"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>
-                  I am the legal representative of this company *
-                </FormLabel>
-                <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
 
         <div className="flex justify-between">
           <Button type="button" variant="outline" onClick={onPrevious}>
