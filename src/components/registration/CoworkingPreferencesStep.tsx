@@ -24,7 +24,6 @@ import { RegistrationData } from '@/pages/Register';
 
 const preferencesSchema = z.object({
   preferredLocation: z.string().min(1, 'Please select a preferred location'),
-  membershipType: z.string().min(1, 'Please select a membership type'),
   startDate: z.string().min(1, 'Please select a start date'),
 });
 
@@ -45,7 +44,6 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
     resolver: zodResolver(preferencesSchema),
     defaultValues: {
       preferredLocation: data.preferredLocation,
-      membershipType: data.membershipType,
       startDate: data.startDate,
     },
   });
@@ -97,30 +95,6 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
                     <SelectItem value="sydney">Sydney, Australia</SelectItem>
                     <SelectItem value="singapore">Singapore</SelectItem>
                     <SelectItem value="tokyo">Tokyo, Japan</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="membershipType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Membership Type *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select membership type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="hot-desk">Hot Desk - $99/month</SelectItem>
-                    <SelectItem value="dedicated-desk">Dedicated Desk - $199/month</SelectItem>
-                    <SelectItem value="private-office">Private Office - $399/month</SelectItem>
-                    <SelectItem value="team-office">Team Office - $999/month</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

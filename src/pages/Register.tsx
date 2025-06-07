@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,7 +34,6 @@ export interface RegistrationData {
   
   // Coworking Preferences
   preferredLocation: string;
-  membershipType: string;
   startDate: string;
   
   // Payment
@@ -64,7 +62,6 @@ const Register = () => {
       phone: ''
     },
     preferredLocation: '',
-    membershipType: '',
     startDate: '',
     paymentCompleted: false
   });
