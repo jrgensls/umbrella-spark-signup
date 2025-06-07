@@ -17,12 +17,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RegistrationData } from '@/pages/Register';
 
 const companyDetailsSchema = z.object({
-  companyName: z.string().min(1, 'Company name is required'),
-  contactPersonName: z.string().min(1, 'Contact person name is required'),
-  contactEmail: z.string().email('Please enter a valid email address'),
-  contactPhone: z.string().min(1, 'Contact phone is required'),
-  vatTaxNumber: z.string().min(1, 'VAT tax number is required'),
-  organizationNumber: z.string().min(1, 'Organization number is required'),
+  companyName: z.string().optional(),
+  contactPersonName: z.string().optional(),
+  contactEmail: z.string().optional(),
+  contactPhone: z.string().optional(),
+  vatTaxNumber: z.string().optional(),
+  organizationNumber: z.string().optional(),
   vatRepresentative: z.boolean(),
 });
 
@@ -66,7 +66,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
             name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name *</FormLabel>
+                <FormLabel>Company Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your company name" {...field} />
                 </FormControl>
@@ -80,7 +80,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
             name="contactPersonName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contact Person Name *</FormLabel>
+                <FormLabel>Contact Person Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter contact person name" {...field} />
                 </FormControl>
@@ -95,7 +95,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
               name="contactEmail"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Email *</FormLabel>
+                  <FormLabel>Contact Email</FormLabel>
                   <FormControl>
                     <Input type="email" placeholder="Enter contact email" {...field} />
                   </FormControl>
@@ -109,7 +109,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
               name="contactPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Phone *</FormLabel>
+                  <FormLabel>Contact Phone</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter contact phone" {...field} />
                   </FormControl>
@@ -125,7 +125,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
               name="vatTaxNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>VAT Tax Number *</FormLabel>
+                  <FormLabel>VAT Tax Number</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter VAT tax number" {...field} />
                   </FormControl>
@@ -139,7 +139,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
               name="organizationNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Organization Number *</FormLabel>
+                  <FormLabel>Organization Number</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter organization number" {...field} />
                   </FormControl>
