@@ -79,7 +79,7 @@ export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ data }
         size="lg"
         className="w-full"
       >
-        {processing ? 'Redirecting to Stripe...' : 'Activate payment method with Stripe - €1.00'}
+        {processing ? 'Redirecting to Stripe...' : 'Activate payment method with Stripe - kr 1,00'}
       </Button>
     </Card>
   );
