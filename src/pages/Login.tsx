@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,7 +32,7 @@ const Login = () => {
           <CardContent className="space-y-6">
             {/* Zapfloor Login Section */}
             <div>
-              <h3 className="text-lg font-semibold mb-3">Existing Zapfloor Users</h3>
+              <h3 className="text-lg font-semibold mb-3">Existing user</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 If you have a Zapfloor account, please login below with your existing credentials.
               </p>
