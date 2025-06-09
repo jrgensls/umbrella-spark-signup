@@ -73,7 +73,7 @@ serve(async (req) => {
               name: "Umbrella Network Registration",
               description: "Setup Fee"
             },
-            unit_amount: 100, // kr 1,00 in øre (Danish Krone cents)
+            unit_amount: 500, // kr 5,00 in øre (Danish Krone cents)
           },
           quantity: 1,
         },
