@@ -28,9 +28,6 @@ const Login = () => {
         <Card className="p-6">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Welcome to Umbrella Network</CardTitle>
-            <p className="text-muted-foreground mt-2">
-              Access premium coworking spaces worldwide
-            </p>
           </CardHeader>
           
           <CardContent className="space-y-6">
