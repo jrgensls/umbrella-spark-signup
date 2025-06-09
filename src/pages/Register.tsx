@@ -157,7 +157,7 @@ const Register = () => {
               Register Your Company
             </h1>
             <p className="text-muted-foreground mt-2">
-              Join the Co-create Network and unlock premium coworking spaces worldwide
+              Join the Co-create Network and unlock coworking spaces near your home
             </p>
           </div>
 

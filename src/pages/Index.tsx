@@ -31,7 +31,7 @@ const Index = () => {
             Welcome to the <span className="text-primary">Co-create Network</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Access premium coworking spaces worldwide. Connect, collaborate, and grow your business in our global network of professional workspaces.
+            Access coworking spaces near your home. Connect, collaborate, and grow your business in our global network of professional workspaces.
           </p>
           <div className="space-x-4">
             <Link to="/login">
@@ -58,7 +58,7 @@ const Index = () => {
               <Globe className="h-12 w-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">Global Access</h3>
               <p className="text-muted-foreground">
-                Work from any of our 500+ locations across 50 countries worldwide.
+                Work from any of our 500+ locations across 50 countries near your home.
               </p>
             </Card>
             <Card className="p-6 text-center">
@@ -70,9 +70,9 @@ const Index = () => {
             </Card>
             <Card className="p-6 text-center">
               <Building className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Premium Facilities</h3>
+              <h3 className="text-xl font-semibold mb-2">Facilities</h3>
               <p className="text-muted-foreground">
-                Enjoy high-speed internet, meeting rooms, and premium amenities.
+                Enjoy high-speed internet, meeting rooms, and amenities.
               </p>
             </Card>
           </div>
