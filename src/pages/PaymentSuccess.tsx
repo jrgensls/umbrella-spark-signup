@@ -46,9 +46,9 @@ const PaymentSuccess = () => {
               <div className="flex items-start gap-3">
                 <ArrowRight className="h-5 w-5 text-green-500 mt-0.5" />
                 <div>
-                  <h3 className="font-medium">Access Your Workspace</h3>
+                  <h3 className="font-medium">Access a workspace nearby</h3>
                   <p className="text-sm text-muted-foreground">
-                    Once setup is complete, you'll have access to premium coworking spaces worldwide.
+                    Once setup is complete, you and your colleagues will have access to coworking spaces across the country, near your home.
                   </p>
                 </div>
               </div>
