@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -14,13 +14,32 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Check, ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { RegistrationData } from '@/pages/Register';
+
+const countries = [
+  { value: 'DK', label: 'Denmark' },
+  { value: 'BE', label: 'Belgium' },
+  { value: 'NL', label: 'The Netherlands' },
+  { value: 'NO', label: 'Norway' },
+  { value: 'SE', label: 'Sweden' },
+  { value: 'FI', label: 'Finland' },
+  { value: 'DE', label: 'Germany' },
+  { value: 'FR', label: 'France' },
+];
 
 const contactDetailsSchema = z.object({
   vatTaxNumber: z.string().optional(),
@@ -51,6 +70,8 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
   onNext,
   onPrevious,
 }) => {
+  const [countryOpen, setCountryOpen] = useState(false);
+
   const form = useForm<z.infer<typeof contactDetailsSchema>>({
     resolver: zodResolver(contactDetailsSchema),
     defaultValues: {
@@ -58,7 +79,7 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
       organizationNumber: data.organizationNumber,
       billingAddress: {
         ...data.billingAddress,
-        country: data.billingAddress.country || 'BE'
+        country: data.billingAddress.country || 'DK'
       },
       additionalBillingContact: data.additionalBillingContact,
     },
@@ -159,23 +180,56 @@ export const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Country</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value || 'BE'}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="BE">Belgium</SelectItem>
-                    <SelectItem value="US">United States</SelectItem>
-                    <SelectItem value="CA">Canada</SelectItem>
-                    <SelectItem value="UK">United Kingdom</SelectItem>
-                    <SelectItem value="AU">Australia</SelectItem>
-                    <SelectItem value="DE">Germany</SelectItem>
-                    <SelectItem value="FR">France</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={countryOpen}
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? countries.find((country) => country.value === field.value)?.label
+                          : "Select country"}
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search country..." />
+                      <CommandList>
+                        <CommandEmpty>No country found.</CommandEmpty>
+                        <CommandGroup>
+                          {countries.map((country) => (
+                            <CommandItem
+                              key={country.value}
+                              value={country.label}
+                              onSelect={() => {
+                                field.onChange(country.value);
+                                setCountryOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value === country.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {country.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
