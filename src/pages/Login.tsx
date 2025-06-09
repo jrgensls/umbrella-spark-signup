@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ const Login = () => {
       <div className="container mx-auto max-w-md">
         <Card className="p-6">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Welcome to Umbrella Network</CardTitle>
+            <CardTitle className="text-2xl font-bold">Welcome to Co-create Network</CardTitle>
           </CardHeader>
           
           <CardContent className="space-y-6">
@@ -81,7 +82,7 @@ const Login = () => {
             
             {/* Sign Up Section */}
             <div>
-              <h3 className="text-lg font-semibold mb-3">New to Umbrella Network?</h3>
+              <h3 className="text-lg font-semibold mb-3">New to Co-create Network?</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Create your company account and join our global coworking network.
               </p>

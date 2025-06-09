@@ -18,7 +18,7 @@ const PaymentSuccess = () => {
               Payment Successful!
             </h1>
             <p className="text-lg text-muted-foreground">
-              Welcome to the Umbrella Network!
+              Welcome to the Co-create Network!
             </p>
           </div>
 
@@ -65,8 +65,8 @@ const PaymentSuccess = () => {
             </Button>
             <p className="text-sm text-muted-foreground">
               Need help? Contact our support team at{' '}
-              <a href="mailto:support@umbrellanetwork.com" className="text-primary hover:underline">
-                support@umbrellanetwork.com
+              <a href="mailto:support@co-create.com" className="text-primary hover:underline">
+                support@co-create.com
               </a>
             </p>
           </div>

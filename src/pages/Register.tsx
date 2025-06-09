@@ -93,7 +93,7 @@ const Register = () => {
   const handleSubmit = () => {
     toast({
       title: "Registration Complete!",
-      description: "Welcome to the Umbrella Network!"
+      description: "Welcome to the Co-create Network!"
     });
   };
 
@@ -157,7 +157,7 @@ const Register = () => {
               Register Your Company
             </h1>
             <p className="text-muted-foreground mt-2">
-              Join the Umbrella Network and unlock premium coworking spaces worldwide
+              Join the Co-create Network and unlock premium coworking spaces worldwide
             </p>
           </div>
 

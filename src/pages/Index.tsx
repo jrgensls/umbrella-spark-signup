@@ -12,9 +12,9 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">U</span>
+              <span className="text-primary-foreground font-bold text-sm">C</span>
             </div>
-            <span className="font-semibold text-lg">Umbrella Workspace</span>
+            <span className="font-semibold text-lg">Co-create Workspace</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#" className="text-sm hover:text-primary">Home</a>
@@ -28,7 +28,7 @@ const Index = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Welcome to the <span className="text-primary">Umbrella Network</span>
+            Welcome to the <span className="text-primary">Co-create Network</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Access premium coworking spaces worldwide. Connect, collaborate, and grow your business in our global network of professional workspaces.
@@ -51,7 +51,7 @@ const Index = () => {
       <section className="py-16 px-4 bg-muted/50">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Why Choose Umbrella Network?
+            Why Choose Co-create Network?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="p-6 text-center">
@@ -100,7 +100,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t py-8 px-4">
         <div className="container mx-auto text-center text-muted-foreground">
-          <p>&copy; 2024 Umbrella Workspace. All rights reserved.</p>
+          <p>&copy; 2024 Co-create Workspace. All rights reserved.</p>
         </div>
       </footer>
     </div>
