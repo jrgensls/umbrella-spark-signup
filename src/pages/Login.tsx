@@ -34,7 +34,7 @@ const Login = () => {
             <div>
               <h3 className="text-lg font-semibold mb-3">Already have a Zapfloor login?</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                If you have a Zapfloor account, please login below with your existing credentials.
+                Co-create is powered by Zapfloor, login below with your existing credentials
               </p>
               
               <div className="space-y-4">
