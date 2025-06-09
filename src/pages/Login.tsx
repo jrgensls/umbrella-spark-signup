@@ -32,7 +32,7 @@ const Login = () => {
           <CardContent className="space-y-6">
             {/* Zapfloor Login Section */}
             <div>
-              <h3 className="text-lg font-semibold mb-3">Existing user</h3>
+              <h3 className="text-lg font-semibold mb-3">Already have a Zapfloor login?</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 If you have a Zapfloor account, please login below with your existing credentials.
               </p>
