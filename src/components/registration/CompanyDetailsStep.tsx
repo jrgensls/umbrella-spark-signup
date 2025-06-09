@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -127,7 +128,7 @@ export const CompanyDetailsStep: React.FC<CompanyDetailsStepProps> = ({
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>
-                    Legal Representative
+                    I'm the legal representative of this company
                   </FormLabel>
                 </div>
               </FormItem>
