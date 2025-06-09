@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -120,12 +119,11 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
         <div className="bg-muted p-4 rounded-lg">
           <h4 className="font-semibold mb-2">What's Included:</h4>
           <ul className="text-sm space-y-1 text-muted-foreground">
-            <li>• 24/7 access to all Umbrella Network locations</li>
+            <li>• Work near your ideal location</li>
+            <li>• 24/7 reservation to all Umbrella Network locations</li>
             <li>• High-speed WiFi and printing facilities</li>
-            <li>• Meeting room credits included</li>
-            <li>• Complimentary beverages and snacks</li>
-            <li>• Networking events and workshops</li>
-            <li>• Professional mailing address</li>
+            <li>• Meeting room or flex desk options</li>
+            <li>• Lunch and other services available (depending on coworking location)</li>
           </ul>
         </div>
 
