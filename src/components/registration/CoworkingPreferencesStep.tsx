@@ -87,14 +87,10 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="new-york">New York, NY</SelectItem>
-                    <SelectItem value="san-francisco">San Francisco, CA</SelectItem>
-                    <SelectItem value="london">London, UK</SelectItem>
-                    <SelectItem value="toronto">Toronto, Canada</SelectItem>
-                    <SelectItem value="berlin">Berlin, Germany</SelectItem>
-                    <SelectItem value="sydney">Sydney, Australia</SelectItem>
-                    <SelectItem value="singapore">Singapore</SelectItem>
-                    <SelectItem value="tokyo">Tokyo, Japan</SelectItem>
+                    <SelectItem value="unknown">I don't know yet</SelectItem>
+                    <SelectItem value="kirstinelund">Kirstinelund (Lystrup)</SelectItem>
+                    <SelectItem value="mollerup-gods">Møllerup Gods (Rønde)</SelectItem>
+                    <SelectItem value="bakkegaarden">Bakkegaarden (Aarhus)</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
