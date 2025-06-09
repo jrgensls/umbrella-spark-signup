@@ -1,9 +1,9 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -23,7 +23,7 @@ import { RegistrationData } from '@/pages/Register';
 
 const preferencesSchema = z.object({
   preferredLocation: z.string().optional(),
-  startDate: z.string().optional(),
+  companySize: z.string().optional(),
 });
 
 interface CoworkingPreferencesStepProps {
@@ -43,28 +43,13 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
     resolver: zodResolver(preferencesSchema),
     defaultValues: {
       preferredLocation: data.preferredLocation,
-      startDate: data.startDate,
+      companySize: data.companySize,
     },
   });
 
   const onSubmit = (values: z.infer<typeof preferencesSchema>) => {
     onUpdate(values);
     onNext();
-  };
-
-  // Generate date options (next 6 months)
-  const getDateOptions = () => {
-    const dates = [];
-    const today = new Date();
-    for (let i = 0; i < 180; i += 30) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      dates.push({
-        value: date.toISOString().split('T')[0],
-        label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-      });
-    }
-    return dates;
   };
 
   return (
@@ -99,17 +84,24 @@ export const CoworkingPreferencesStep: React.FC<CoworkingPreferencesStepProps> =
 
           <FormField
             control={form.control}
-            name="startDate"
+            name="companySize"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Preferred Start Date</FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    min={new Date().toISOString().split('T')[0]}
-                    {...field}
-                  />
-                </FormControl>
+                <FormLabel>Company Size</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your company size" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1-5">1-5 employees</SelectItem>
+                    <SelectItem value="6-15">6-15 employees</SelectItem>
+                    <SelectItem value="16-50">16-50 employees</SelectItem>
+                    <SelectItem value="51-200">51-200 employees</SelectItem>
+                    <SelectItem value="200+">200+ employees</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
