@@ -34,7 +34,7 @@ const Index = () => {
             Access premium coworking spaces worldwide. Connect, collaborate, and grow your business in our global network of professional workspaces.
           </p>
           <div className="space-x-4">
-            <Link to="/register">
+            <Link to="/login">
               <Button size="lg" className="text-lg px-8">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -88,7 +88,7 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8">
             Start your company registration today and unlock access to our global workspace network.
           </p>
-          <Link to="/register">
+          <Link to="/login">
             <Button size="lg" className="text-lg px-8">
               Register Your Company
               <ArrowRight className="ml-2 h-5 w-5" />
