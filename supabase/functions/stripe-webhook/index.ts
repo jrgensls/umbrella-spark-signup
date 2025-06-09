@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,6 +27,19 @@ serve(async (req) => {
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
+    });
+
+    // Initialize Supabase client with service role key for database operations
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error("Supabase configuration missing");
+      throw new Error("Supabase configuration error");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false }
     });
 
     const body = await req.text();
@@ -65,7 +79,66 @@ serve(async (req) => {
       const customer = await stripe.customers.retrieve(session.customer as string);
       console.log("Retrieved customer:", customer.id);
       
-      // Prepare data to send to your webhook
+      // Extract registration data from session metadata
+      const metadata = session.metadata || {};
+      console.log("Session metadata:", metadata);
+
+      // Parse billing address from metadata
+      const billingAddress = {
+        street: metadata.billing_street || null,
+        city: metadata.billing_city || null,
+        postalCode: metadata.billing_postal_code || null,
+        country: metadata.billing_country || null,
+      };
+
+      // Parse additional contact from metadata
+      const additionalContact = {
+        name: metadata.additional_contact_name || null,
+        email: metadata.additional_contact_email || null,
+        phone: metadata.additional_contact_phone || null,
+      };
+
+      // Insert registration data into the database
+      const registrationData = {
+        stripe_session_id: session.id,
+        stripe_customer_id: session.customer as string,
+        company_name: metadata.company_name || '',
+        contact_person_name: metadata.contact_person_name || '',
+        contact_email: metadata.contact_email || '',
+        contact_phone: metadata.contact_phone || '',
+        vat_tax_number: metadata.vat_tax_number || null,
+        organization_number: metadata.organization_number || null,
+        legal_representative: metadata.legal_representative === 'true',
+        billing_street: billingAddress.street,
+        billing_city: billingAddress.city,
+        billing_postal_code: billingAddress.postalCode,
+        billing_country: billingAddress.country,
+        additional_contact_name: additionalContact.name,
+        additional_contact_email: additionalContact.email,
+        additional_contact_phone: additionalContact.phone,
+        preferred_location: metadata.preferred_location || '',
+        start_date: metadata.start_date || null,
+        amount_paid: session.amount_total,
+        currency: session.currency,
+        payment_status: 'paid',
+      };
+
+      console.log("Inserting registration data:", registrationData);
+
+      const { data: insertedData, error: insertError } = await supabase
+        .from('registrations')
+        .insert(registrationData)
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Error inserting registration data:", insertError);
+        throw new Error(`Database insert failed: ${insertError.message}`);
+      }
+
+      console.log("Successfully saved registration to database:", insertedData.id);
+
+      // Prepare data to send to external webhook
       const webhookData = {
         stripe_session_id: session.id,
         customer_id: session.customer,
@@ -75,6 +148,7 @@ serve(async (req) => {
         customer_email: (customer as Stripe.Customer).email,
         customer_name: (customer as Stripe.Customer).name,
         metadata: session.metadata,
+        registration_id: insertedData.id,
         timestamp: new Date().toISOString(),
       };
 

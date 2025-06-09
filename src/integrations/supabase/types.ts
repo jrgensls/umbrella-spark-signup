@@ -9,7 +9,87 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      registrations: {
+        Row: {
+          additional_contact_email: string | null
+          additional_contact_name: string | null
+          additional_contact_phone: string | null
+          amount_paid: number | null
+          billing_city: string | null
+          billing_country: string | null
+          billing_postal_code: string | null
+          billing_street: string | null
+          company_name: string
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at: string
+          currency: string | null
+          id: string
+          legal_representative: boolean | null
+          organization_number: string | null
+          payment_status: string | null
+          preferred_location: string
+          start_date: string | null
+          stripe_customer_id: string | null
+          stripe_session_id: string
+          updated_at: string
+          vat_tax_number: string | null
+        }
+        Insert: {
+          additional_contact_email?: string | null
+          additional_contact_name?: string | null
+          additional_contact_phone?: string | null
+          amount_paid?: number | null
+          billing_city?: string | null
+          billing_country?: string | null
+          billing_postal_code?: string | null
+          billing_street?: string | null
+          company_name: string
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at?: string
+          currency?: string | null
+          id?: string
+          legal_representative?: boolean | null
+          organization_number?: string | null
+          payment_status?: string | null
+          preferred_location: string
+          start_date?: string | null
+          stripe_customer_id?: string | null
+          stripe_session_id: string
+          updated_at?: string
+          vat_tax_number?: string | null
+        }
+        Update: {
+          additional_contact_email?: string | null
+          additional_contact_name?: string | null
+          additional_contact_phone?: string | null
+          amount_paid?: number | null
+          billing_city?: string | null
+          billing_country?: string | null
+          billing_postal_code?: string | null
+          billing_street?: string | null
+          company_name?: string
+          contact_email?: string
+          contact_person_name?: string
+          contact_phone?: string
+          created_at?: string
+          currency?: string | null
+          id?: string
+          legal_representative?: boolean | null
+          organization_number?: string | null
+          payment_status?: string | null
+          preferred_location?: string
+          start_date?: string | null
+          stripe_customer_id?: string | null
+          stripe_session_id?: string
+          updated_at?: string
+          vat_tax_number?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
