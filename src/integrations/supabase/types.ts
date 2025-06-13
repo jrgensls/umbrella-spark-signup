@@ -20,6 +20,7 @@ export type Database = {
           billing_postal_code: string | null
           billing_street: string | null
           company_name: string
+          company_size: string | null
           contact_email: string
           contact_person_name: string
           contact_phone: string
@@ -46,6 +47,7 @@ export type Database = {
           billing_postal_code?: string | null
           billing_street?: string | null
           company_name: string
+          company_size?: string | null
           contact_email: string
           contact_person_name: string
           contact_phone: string
@@ -72,6 +74,7 @@ export type Database = {
           billing_postal_code?: string | null
           billing_street?: string | null
           company_name?: string
+          company_size?: string | null
           contact_email?: string
           contact_person_name?: string
           contact_phone?: string

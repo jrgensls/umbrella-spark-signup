@@ -117,6 +117,7 @@ serve(async (req) => {
         additional_contact_email: additionalContact.email,
         additional_contact_phone: additionalContact.phone,
         preferred_location: metadata.preferred_location || '',
+        company_size: metadata.company_size || null,
         start_date: metadata.start_date || null,
         amount_paid: session.amount_total,
         currency: session.currency,
