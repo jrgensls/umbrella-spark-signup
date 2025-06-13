@@ -16,88 +16,84 @@ serve(async (req) => {
 
   try {
     console.log("Starting checkout session creation...");
-    
+
     const { registrationData } = await req.json();
     console.log("Registration data received:", registrationData);
 
     const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeSecretKey) {
       console.error("STRIPE_SECRET_KEY not found in environment variables");
-      console.log("Available env vars:", Object.keys(Deno.env.toObject()));
       throw new Error("Stripe configuration error - STRIPE_SECRET_KEY not found");
     }
     console.log("Stripe secret key found");
 
-    // Initialize Stripe
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: "2023-10-16",
     });
 
-    // Check if a Stripe customer record exists for this email
+    // Check if customer already exists
     console.log("Checking for existing customer with email:", registrationData.contactEmail);
-    const customers = await stripe.customers.list({ 
-      email: registrationData.contactEmail, 
-      limit: 1 
+    const existingCustomers = await stripe.customers.list({
+      email: registrationData.contactEmail,
+      limit: 1,
     });
-    
+
     let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
+    if (existingCustomers.data.length > 0) {
+      customerId = existingCustomers.data[0].id;
       console.log("Found existing customer:", customerId);
     } else {
-      // Create a new customer
       console.log("Creating new Stripe customer...");
       const customer = await stripe.customers.create({
         email: registrationData.contactEmail,
         name: registrationData.contactPersonName,
-        metadata: {
-          company_name: registrationData.companyName,
-          contact_person: registrationData.contactPersonName,
-          preferred_location: registrationData.preferredLocation,
-        },
       });
       customerId = customer.id;
       console.log("Created new customer:", customerId);
     }
 
-    // Create a one-time payment session with payment method saving enabled
     console.log("Creating Stripe checkout session...");
+
+    // Prepare metadata for the session
+    const metadata = {
+      company_name: registrationData.companyName || '',
+      contact_person_name: registrationData.contactPersonName || '',
+      contact_email: registrationData.contactEmail || '',
+      contact_phone: registrationData.contactPhone || '',
+      vat_tax_number: registrationData.vatTaxNumber || '',
+      organization_number: registrationData.organizationNumber || '',
+      legal_representative: registrationData.legalRepresentative ? 'true' : 'false',
+      billing_street: registrationData.billingAddress?.street || '',
+      billing_city: registrationData.billingAddress?.city || '',
+      billing_postal_code: registrationData.billingAddress?.postalCode || '',
+      billing_country: registrationData.billingAddress?.country || '',
+      additional_contact_name: registrationData.additionalBillingContact?.name || '',
+      additional_contact_email: registrationData.additionalBillingContact?.email || '',
+      additional_contact_phone: registrationData.additionalBillingContact?.phone || '',
+      preferred_location: registrationData.preferredLocation || '',
+      company_size: registrationData.companySize || '',
+    };
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      billing_address_collection: "auto", // Don't require billing address collection
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
             currency: "dkk",
-            product_data: { 
-              name: "Umbrella Network Registration",
-              description: "Setup Fee"
+            product_data: {
+              name: "Co-create Network Registration",
+              description: "Access to coworking spaces in the Umbrella Network",
             },
-            unit_amount: 500, // kr 5,00 in øre (Danish Krone cents)
+            unit_amount: 500, // 5.00 DKK in øre
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      payment_intent_data: {
-        setup_future_usage: "on_session", // Save payment method for future use
-      },
-      success_url: `${req.headers.get("origin")}/payment-success`,
-      cancel_url: `${req.headers.get("origin")}/register?canceled=true`,
-      metadata: {
-        company_name: registrationData.companyName,
-        contact_person: registrationData.contactPersonName,
-        contact_email: registrationData.contactEmail,
-        contact_phone: registrationData.contactPhone,
-        vat_tax_number: registrationData.vatTaxNumber,
-        organization_number: registrationData.organizationNumber,
-        preferred_location: registrationData.preferredLocation,
-        start_date: registrationData.startDate,
-        billing_street: registrationData.billingAddress.street || "",
-        billing_city: registrationData.billingAddress.city || "",
-        billing_postal_code: registrationData.billingAddress.postalCode || "",
-        billing_country: registrationData.billingAddress.country || "",
-      },
+      success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.get("origin")}/register`,
+      metadata: metadata,
     });
 
     console.log("Checkout session created successfully:", session.id);
